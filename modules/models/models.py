@@ -53,9 +53,8 @@ class OpenAIClient(BaseLLMModel):
     def get_answer_stream_iter(self):
         response = self._get_response(stream=True)
         if response is not None:
-            iter = self._decode_chat_response(response)
             partial_text = ""
-            for chunk in iter:
+            for chunk in response:
                 print(chunk["text_new"], end="", flush=True)
                 partial_text += chunk["text_new"]
                 yield partial_text
