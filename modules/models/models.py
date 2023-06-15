@@ -118,6 +118,8 @@ class OpenAIClient(BaseLLMModel):
             model = "beaver"
         elif self.model_name == "Claude-instant":
             model = "a2"
+        elif self.model_name == "Sage":
+            model = "capybara"
         elif self.model_name == "Dragonfly":
             model = "nutria"
         elif self.model_name == "Claude-instant-100k":
