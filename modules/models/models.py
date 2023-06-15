@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
-
+import poe
 import logging
 import json
 import commentjson as cjson
@@ -53,10 +53,10 @@ class OpenAIClient(BaseLLMModel):
     def get_answer_stream_iter(self):
         response = self._get_response(stream=True)
         if response is not None:
-            iter = self._decode_chat_response(response)
             partial_text = ""
-            for i in iter:
-                partial_text += i
+            for chunk in response:
+                print(chunk["text_new"], end="", flush=True)
+                partial_text += chunk["text_new"]
                 yield partial_text
         else:
             yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
@@ -165,13 +165,11 @@ class OpenAIClient(BaseLLMModel):
 
         with retrieve_proxy():
             try:
-                response = requests.post(
-                    shared.state.completion_url,
-                    headers=headers,
-                    json=payload,
-                    stream=stream,
-                    timeout=timeout,
-                )
+                token = sys.argv[1]
+                poe.logger.setLevel(logging.INFO)
+                client = poe.Client(token)
+                message = payload["messages"]
+                response = client.send_message("capybara", message, with_chat_break=True)
             except:
                 return None
         return response
