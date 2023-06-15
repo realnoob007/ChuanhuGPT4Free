@@ -169,7 +169,7 @@ class OpenAIClient(BaseLLMModel):
                 poe.logger.setLevel(logging.INFO)
                 client = poe.Client(token)
                 message = payload["messages"]
-                response = client.send_message("capybara", message, with_chat_break=True)
+                response = client.send_message("beaver", message, with_chat_break=True)
             except:
                 return None
         return response
