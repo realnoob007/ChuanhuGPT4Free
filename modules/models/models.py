@@ -162,10 +162,7 @@ class OpenAIClient(BaseLLMModel):
         return response
 
     def _refresh_header(self):
-        self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
-        }
+        pass
 
     def _get_billing_data(self, billing_url):
         with retrieve_proxy():
