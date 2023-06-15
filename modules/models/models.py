@@ -181,7 +181,8 @@ class OpenAIClient(BaseLLMModel):
         error_msg = ""
         for chunk in response:
             if chunk:
-                chunk = str(chunk).decode()
+                chunk = str(chunk)
+                chunk = chunk.decode()
                 chunk_length = len(chunk)
                 try:
                     chunk = json.loads(chunk[6:])
