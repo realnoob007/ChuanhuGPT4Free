@@ -78,27 +78,16 @@ class OpenAIClient(BaseLLMModel):
         return input_token_count
 
     def billing_info(self):
-        try:
-            curr_time = datetime.datetime.now()
-            last_day_of_month = get_last_day_of_month(
-                curr_time).strftime("%Y-%m-%d")
-            first_day_of_month = curr_time.replace(day=1).strftime("%Y-%m-%d")
-            usage_url = f"{shared.state.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
-            return i18n("随便用")
-            # rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
-            rounded_usage = round(usage_data["total_usage"] / 100, 5)
-            usage_percent = round(usage_data["total_usage"] / usage_limit, 2)
-            # return i18n("**本月使用金额** ") + f"\u3000 ${rounded_usage}"
             return """\
                 <b>""" + i18n("本月使用金额") + f"""</b>
                 <div class="progress-bar">
-                    <div class="progress" style="width: {usage_percent}%;">
-                        <span class="progress-text">{usage_percent}%</span>
+                    <div class="progress" style="width: 0%;">
+                        <span class="progress-text">0%</span>
                     </div>
                 </div>
-                <div style="display: flex; justify-content: space-between;"><span>${rounded_usage}</span><span>${usage_limit}</span></div>
+                <div style="display: flex; justify-content: space-between;"><span>$0</span><span>$0</span></div>
                 """
-
+            
     def set_token_upper_limit(self, new_upper_limit):
         pass
 
