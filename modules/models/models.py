@@ -121,27 +121,10 @@ class OpenAIClient(BaseLLMModel):
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
-        openai_api_key = self.api_key
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW +
                       f"{history}" + colorama.Fore.RESET)
-        headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Te": "trailers",
-            "Upgrade-Insecure-Requests": "1"
-        }
-        poe.headers = {
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Te": "trailers",
-            "Upgrade-Insecure-Requests": "1"
-        }
 
         if system_prompt is not None:
             history = [construct_system(system_prompt), *history]
@@ -156,15 +139,6 @@ class OpenAIClient(BaseLLMModel):
             "presence_penalty": self.presence_penalty,
             "frequency_penalty": self.frequency_penalty,
         }
-
-        if self.max_generation_token is not None:
-            payload["max_tokens"] = self.max_generation_token
-        if self.stop_sequence is not None:
-            payload["stop"] = self.stop_sequence
-        if self.logit_bias is not None:
-            payload["logit_bias"] = self.logit_bias
-        if self.user_identifier:
-            payload["user"] = self.user_identifier
 
         if stream:
             timeout = TIMEOUT_STREAMING
@@ -182,6 +156,7 @@ class OpenAIClient(BaseLLMModel):
                 client = poe.Client(token)
                 message = payload["messages"]
                 response = client.send_message("beaver", message, with_chat_break=True)
+                print(response)
             except:
                 return None
         return response
