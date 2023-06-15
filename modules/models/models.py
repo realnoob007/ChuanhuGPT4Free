@@ -84,11 +84,7 @@ class OpenAIClient(BaseLLMModel):
                 curr_time).strftime("%Y-%m-%d")
             first_day_of_month = curr_time.replace(day=1).strftime("%Y-%m-%d")
             usage_url = f"{shared.state.usage_api_url}?start_date={first_day_of_month}&end_date={last_day_of_month}"
-            try:
-                usage_data = self._get_billing_data(usage_url)
-            except Exception as e:
-                logging.error(f"获取API使用情况失败:" + str(e))
-                return i18n("**获取API使用情况失败**")
+            return i18n("随便用")
             # rounded_usage = "{:.5f}".format(usage_data["total_usage"] / 100)
             rounded_usage = round(usage_data["total_usage"] / 100, 5)
             usage_percent = round(usage_data["total_usage"] / usage_limit, 2)
@@ -102,19 +98,6 @@ class OpenAIClient(BaseLLMModel):
                 </div>
                 <div style="display: flex; justify-content: space-between;"><span>${rounded_usage}</span><span>${usage_limit}</span></div>
                 """
-        except requests.exceptions.ConnectTimeout:
-            status_text = (
-                STANDARD_ERROR_MSG + CONNECTION_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
-            )
-            return status_text
-        except requests.exceptions.ReadTimeout:
-            status_text = STANDARD_ERROR_MSG + READ_TIMEOUT_MSG + ERROR_RETRIEVE_MSG
-            return status_text
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            logging.error(i18n("获取API使用情况失败:") + str(e))
-            return STANDARD_ERROR_MSG + ERROR_RETRIEVE_MSG
 
     def set_token_upper_limit(self, new_upper_limit):
         pass
