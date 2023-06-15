@@ -116,6 +116,14 @@ class OpenAIClient(BaseLLMModel):
             model = "chinchilla"
         elif self.model_name == "gpt-4":
             model = "beaver"
+        elif self.model_name == "Claude-instant":
+            model = "a2"
+        elif self.model_name == "Dragonfly":
+            model = "nutria"
+        elif self.model_name == "Claude-instant-100k":
+            model = "a2_100k"
+        elif self.model_name == "Claude+":
+            model = "a2_2"
         else:
             model = "chinchilla"
 
