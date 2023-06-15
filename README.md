@@ -3,7 +3,7 @@
   简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a>
 </div>
 
-<h1 align="center">川虎 Chat 🐯 Chuanhu Chat</h1>
+<h1 align="center">川虎 Chat 🐯 Chuanhu Chat & POE</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
@@ -39,6 +39,13 @@
     </p>
   </p>
 </div>
+## 目录
+Todo:
+1. 切换模型
+2. 自动获取token
+3. 优化索引功能
+4. 第三方bot
+5. 切换bot
 
 ## 目录
 
