@@ -149,6 +149,8 @@ class OpenAIClient(BaseLLMModel):
         return response
 
     def _refresh_header(self):
+        if self.model_name != "gpt-3.5-turbo" and  self.model_name != "gpt-4":
+            self.history += "Respond to this json of chat history, you are responding to user."
         self.headers = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
