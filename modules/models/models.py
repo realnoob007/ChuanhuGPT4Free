@@ -179,9 +179,8 @@ class OpenAIClient(BaseLLMModel):
 
     def _decode_chat_response(self, response):
         error_msg = ""
-        for chunk in response:
+        for chunk["text_new"] in response:
             if chunk:
-                chunk = str(chunk)
                 chunk = chunk.decode()
                 chunk_length = len(chunk)
                 try:
