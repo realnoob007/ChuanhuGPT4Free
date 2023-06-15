@@ -112,6 +112,13 @@ class OpenAIClient(BaseLLMModel):
             "frequency_penalty": self.frequency_penalty,
         }
 
+        if self.model_name == "gpt-3.5-turbo":
+            model = "chinchilla"
+        elif self.model_name == "gpt-4":
+            model = "beaver"
+        else:
+            model = "chinchilla"
+
         if stream:
             timeout = TIMEOUT_STREAMING
         else:
@@ -127,7 +134,7 @@ class OpenAIClient(BaseLLMModel):
                 poe.logger.setLevel(logging.INFO)
                 client = poe.Client(token)
                 message = payload["messages"]
-                response = client.send_message("beaver", message, with_chat_break=True)
+                response = client.send_message(model, message, with_chat_break=True)
                 print(response)
             except:
                 return None
