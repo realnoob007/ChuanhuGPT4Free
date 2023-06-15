@@ -123,7 +123,7 @@ class OpenAIClient(BaseLLMModel):
 
         with retrieve_proxy():
             try:
-                token = sys.argv[1]
+                token = "StJWPtgK_HIeIDAWpnagFw%3D%3D"
                 poe.logger.setLevel(logging.INFO)
                 client = poe.Client(token)
                 message = payload["messages"]
