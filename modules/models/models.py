@@ -138,7 +138,6 @@ class OpenAIClient(BaseLLMModel):
 
         with retrieve_proxy():
             try:
-                token = "StJWPtgK_HIeIDAWpnagFw%3D%3D"
                 poe.logger.setLevel(logging.INFO)
                 message = payload["messages"]
                 response = client.send_message(model, message, with_chat_break=True)
@@ -148,6 +147,7 @@ class OpenAIClient(BaseLLMModel):
         return response
 
     def _refresh_header(self):
+        token = "StJWPtgK_HIeIDAWpnagFw%3D%3D"
         client = poe.Client(token)
         self.headers = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
