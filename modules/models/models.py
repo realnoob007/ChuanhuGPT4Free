@@ -158,7 +158,7 @@ class OpenAIClient(BaseLLMModel):
             else:
                 try:
                     bot = await Chatbot.create() # Passing cookies is "optional", as explained above
-                    reply = await bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.precise, simplify_response=False)
+                    reply = await bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=True)
                     response = reply["text"] # Returns
                     print(response)
                     """
@@ -172,6 +172,7 @@ class OpenAIClient(BaseLLMModel):
                     }
                     """
                     await bot.close()
+                    loop.stop()
                 except:
                     return None
         loop.stop()
