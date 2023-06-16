@@ -51,7 +51,7 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
-        response = asyncio.get_event_loop().run_until_complete(self._get_response(stream=True))
+        response = asyncio.run(self._get_response(stream=True))
         if self.model_name != "Bing":
             if response is not None:
                 partial_text = ""
@@ -174,6 +174,7 @@ class OpenAIClient(BaseLLMModel):
                     await bot.close()
                 except:
                     return None
+        loop.stop()
         return response
 
     def _refresh_header(self):
