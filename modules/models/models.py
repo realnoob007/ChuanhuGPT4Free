@@ -51,7 +51,7 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
-        response = asyncio.run(self._get_response(stream=True))
+        response = asyncio.get_event_loop().run_until_complete(self._get_response(stream=True))
         if self.model_name != "Bing":
             if response is not None:
                 partial_text = ""
@@ -160,6 +160,7 @@ class OpenAIClient(BaseLLMModel):
                     bot = await Chatbot.create() # Passing cookies is "optional", as explained above
                     reply = await bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.precise, simplify_response=False)
                     response = reply["text"] # Returns
+                    print(response)
                     """
                     {
                         "text": str
