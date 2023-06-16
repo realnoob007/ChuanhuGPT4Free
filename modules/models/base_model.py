@@ -129,7 +129,6 @@ class ModelType(Enum):
     YuanAI = 6
     Minimax = 7
     ChuanhuAgent = 8
-    Bing = 9
 
     @classmethod
     def get_type(cls, model_name: str):
@@ -160,7 +159,7 @@ class ModelType(Enum):
         elif "川虎助理" in model_name_lower:
             model_type = ModelType.ChuanhuAgent
         elif "bing" in model_name_lower:
-            model_type = ModelType.Bing
+            model_type = ModelType.OpenAI
         else:
             model_type = ModelType.Unknown
         return model_type
