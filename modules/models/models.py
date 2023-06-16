@@ -12,7 +12,7 @@ import platform
 import base64
 from io import BytesIO
 from PIL import Image
-
+from EdgeGPT.EdgeGPT import Chatbot, ConversationStyle
 from tqdm import tqdm
 import colorama
 import asyncio
