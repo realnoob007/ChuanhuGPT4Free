@@ -51,15 +51,21 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
-        response = self._get_response(stream=True)
-        if response is not None:
-            partial_text = ""
-            for chunk in response:
-                print(chunk["text_new"], end="", flush=True)
-                partial_text += chunk["text_new"]
-                yield partial_text
+        response = asyncio.run(self._get_response(stream=True))
+        if self.model_name != "Bing":
+            if response is not None:
+                partial_text = ""
+                for chunk in response:
+                    print(chunk["text_new"], end="", flush=True)
+                    partial_text += chunk["text_new"]
+                    yield partial_text
+            else:
+                yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
         else:
-            yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+            response = asyncio.run(self._get_response(stream=True))
+            partial_text = ""
+            partial_text += response
+            yield partial_text
 
     def get_answer_at_once(self):
         response = self._get_response()
@@ -92,7 +98,7 @@ class OpenAIClient(BaseLLMModel):
         pass
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
-    def _get_response(self, stream=False):
+    async def _get_response(self, stream=False):
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW +
@@ -124,6 +130,8 @@ class OpenAIClient(BaseLLMModel):
             model = "a2_100k"
         elif self.model_name == "Claude+":
             model = "a2_2"
+        elif self.model_name == "Bing":
+            model = "Bing"
         else:
             model = "chinchilla"
 
@@ -137,15 +145,34 @@ class OpenAIClient(BaseLLMModel):
             logging.info(f"使用自定义API URL: {shared.state.completion_url}")
 
         with retrieve_proxy():
-            try:
-                token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
-                client = poe.Client(token)
-                poe.logger.setLevel(logging.INFO)
-                message = payload["messages"]
-                response = client.send_message(model, message, with_chat_break=True)
-                print(response)
-            except:
-                return None
+            if model != "Bing":
+                try:
+                    token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
+                    client = poe.Client(token)
+                    poe.logger.setLevel(logging.INFO)
+                    message = payload["messages"]
+                    response = client.send_message(model, message, with_chat_break=True)
+                    print(response)
+                except:
+                    return None
+            else:
+                try:
+                    bot = await Chatbot.create() # Passing cookies is "optional", as explained above
+                    reply = await bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.precise, simplify_response=False)
+                    response = reply["text"] # Returns
+                    """
+                    {
+                        "text": str
+                        "author": str
+                        "sources": list[dict]
+                        "sources_text": str
+                        "suggestions": list[str]
+                        "messages_left": int
+                    }
+                    """
+                    await bot.close()
+                except:
+                    return None
         return response
 
     def _refresh_header(self):
