@@ -108,7 +108,7 @@ class OpenAIClient(BaseLLMModel):
         return reply
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
-    def _get_response(self, stream=False):
+    def _get_response(self, stream=False, chat_func=chat):
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW +
@@ -166,7 +166,7 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                response = asyncio.run(chat(payload["messages"]))
+                response = asyncio.run(chat_func(payload["messages"]))
         return response
         
     def _refresh_header(self):
