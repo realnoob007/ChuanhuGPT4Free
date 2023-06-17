@@ -67,6 +67,7 @@ class OpenAIClient(BaseLLMModel):
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
         else:
             if response is not None:
+                partial_text = ""
                 for message in response:
                     print(message)
                     partial_text += message
@@ -170,13 +171,6 @@ class OpenAIClient(BaseLLMModel):
                 else:
                     stream = True
                 response = g4f.ChatCompletion.create(model='gpt-4', messages=self.history, stream=stream, provider=provider)
-                print(type(response))
-                if stream:          
-                	for message in response:
-                            print(type(message))
-                            print(message)
-                else:
-                	print("not stream")
         return response
 
     def _refresh_header(self):
