@@ -99,6 +99,14 @@ class OpenAIClient(BaseLLMModel):
     def set_token_upper_limit(self, new_upper_limit):
         pass
 
+    async def chat(message):
+        bot = await Chatbot.create()
+        response = await bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True)
+        print(json.dumps(response, indent=2))
+        reply = response["text"]
+        await bot.close()
+        return reply
+
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False):
         system_prompt = self.system_prompt
@@ -160,14 +168,6 @@ class OpenAIClient(BaseLLMModel):
             else:
                 response = asyncio.run(chat(payload["messages"]))
         return response
-
-    async def chat(message):
-        bot = await Chatbot.create()
-        response = await bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True)
-        print(json.dumps(response, indent=2))
-        reply = response["text"]
-        await bot.close()
-        return reply
         
     def _refresh_header(self):
         if self.model_name != "gpt-3.5-turbo" and  self.model_name != "gpt-4" and self.model_name != "Bing":
