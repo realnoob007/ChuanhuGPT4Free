@@ -54,7 +54,7 @@ class OpenAIClient(BaseLLMModel):
     async def chat(message):
         bot = await Chatbot.create()
         try:
-            response = await asyncio.wait_for(bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True), timeout=10.0)
+            response = await asyncio.wait_for(bot.ask(prompt="Hello", conversation_style=ConversationStyle.creative, simplify_response=True), timeout=10.0)
             print(json.dumps(response, indent=2))
             reply = response["text"]
         except asyncio.TimeoutError:
@@ -85,7 +85,7 @@ class OpenAIClient(BaseLLMModel):
             content = response["choices"][0]["message"]["content"]
             total_token_count = response["usage"]["total_tokens"]
         else:
-            response = self._get_response(stream=False, chat_func=chat)
+            response = self._get_response(stream=False)
             print(response)
             #partial_text = ""
             partial_text = response["text"]
