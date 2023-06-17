@@ -69,7 +69,6 @@ class OpenAIClient(BaseLLMModel):
             if response is not None:
                 partial_text = ""
                 for message in response:
-                    print(message)
                     partial_text += message
                     partial_text += "\n"
                     yield partial_text
