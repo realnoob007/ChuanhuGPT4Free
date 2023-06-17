@@ -160,7 +160,7 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                response = chat_func()
+                response = chat_func(self)
         return response
         
     def _refresh_header(self):
