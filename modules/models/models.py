@@ -175,16 +175,24 @@ class OpenAIClient(BaseLLMModel):
         return response
         
     def _refresh_header(self):
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Te": "trailers",
+            "Upgrade-Insecure-Requests": "1"
+            }
         if self.model_name != "gpt-3.5-turbo" and  self.model_name != "gpt-4" and self.model_name != "Bing":
             self.history += {"Respond to this json of chat history in plain text, you are responding to user."}
-        if self.model_name != "Bing":
+        if self.model_name == "Bing":
             self.headers = {
-                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-                "Accept-Encoding": "gzip, deflate, br",
-                "Accept-Language": "en-US,en;q=0.5",
-                "Te": "trailers",
-                "Upgrade-Insecure-Requests": "1"
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3 Edge/16.16299',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Te': 'trailers',
+                'Upgrade-Insecure-Requests': '1'
                 }
 
     def _get_billing_data(self, billing_url):
