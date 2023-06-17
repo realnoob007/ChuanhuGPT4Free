@@ -53,7 +53,7 @@ class OpenAIClient(BaseLLMModel):
 
     def get_answer_stream_iter(self):
         if self.model_name != "Bing":
-            response = asyncio.run(self._get_response(stream=True))
+            response = self._get_response(stream=True)
             if response is not None:
                 partial_text = ""
                 for chunk in response:
@@ -63,7 +63,7 @@ class OpenAIClient(BaseLLMModel):
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
         else:
-            response = asyncio.run(self._get_response(stream=True))
+            response = self._get_response(stream=True)
             print(response)
             #partial_text = ""
             partial_text = response["text"]
@@ -102,13 +102,12 @@ class OpenAIClient(BaseLLMModel):
     async def chat(message):
         bot = await Chatbot.create()
         response = await bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True)
-        print(json.dumps(response, indent=2))
-        reply = response["text"]
+        reply = await response["text"]
         await bot.close()
         return reply
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
-    async def _get_response(self, stream=False, chat_func=chat):
+    def _get_response(self, stream=False, chat_func=chat):
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW +
@@ -166,7 +165,7 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                response = await chat_func(payload["messages"])
+                response = asyncio.run(chat_func(payload["messages"]))
         return response
         
     def _refresh_header(self):
