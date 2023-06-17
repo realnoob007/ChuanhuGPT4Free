@@ -51,16 +51,13 @@ class OpenAIClient(BaseLLMModel):
         self.need_api_key = True
         self._refresh_header()
 
-    def chat():
+    def chat(self):
         provider=g4f.Provider.Bing
         if provider in {g4f.Provider.Aws, g4f.Provider.Ora, g4f.Provider.Bard, g4f.Provider.Aichat}:
 	        stream=False
         else:
 	        stream=True
-        response = g4f.ChatCompletion.create(model='gpt-4', 
-        									messages=self.history, 
-        									stream=stream, 
-        									provider=provider)
+        response = g4f.ChatCompletion.create(model='gpt-4', messages=self.history, stream=stream, provider=provider)
         return response
 
     def get_answer_stream_iter(self):
