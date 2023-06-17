@@ -1,6 +1,6 @@
 <div align="right">
   <!-- 语言: -->
-  简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a>
+  简体中文 | <a title="English" href="./readme/README_en.md">English</a>
 </div>
 
 <h1 align="center">川虎 Chat 🐯 Chuanhu Chat & Reverse Engineering</h1>
@@ -22,34 +22,23 @@
         <img alt="GitHub pull requests" src="https://img.shields.io/badge/Telegram-Group-blue.svg?logo=telegram" />
       </a>
       <p>
-        流式传输 / 无限对话 / 保存对话 / 预设Prompt集 / 联网搜索 / 根据文件回答 <br />
-        渲染LaTeX / 渲染表格 / 代码高亮 / 自动亮暗色切换 / 自适应界面 / “小而美”的体验 <br />
-        自定义api-Host / 多参数可调 / 多API Key均衡负载 / 多用户显示 / 适配GPT-4 / 支持本地部署LLM
+        本项目是 [ChuanhuChatGPT](https://github.com/GaiZhenbiao/ChuanhuChatGPT) 的一个分支。ChuanhuChatGPT 是由川虎和他的朋友们构建的一个出色的 LLM 网络平台。我在 UI 基础上添加了基于 POE 和 Bing AI 的反向工程 API。它包括 ChuanhuChatGPT 中描述的所有功能，如网页浏览和保存对话。该项目旨在去中心化 AI 行业。
       </p>
       <a href="https://www.bilibili.com/video/BV1mo4y1r7eE"><strong>视频教程</strong></a>
         ·
       <a href="https://www.bilibili.com/video/BV1184y1w7aP"><strong>2.0介绍视频</strong></a>
-	||
-      <a href="https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT"><strong>在线体验</strong></a>
-      	·
-      <a href="https://huggingface.co/login?next=%2Fspaces%2FJohnSmith9982%2FChuanhuChatGPT%3Fduplicate%3Dtrue"><strong>一键部署</strong></a>
+	·
+      <a href="https://www.chatgay.ink/"><strong>在线体验</strong></a>
     </p>
     <p align="center">
       <img alt="Animation Demo" src="https://user-images.githubusercontent.com/51039745/226255695-6b17ff1f-ea8d-464f-b69b-a7b6b68fffe8.gif" />
     </p>
   </p>
 </div>
-## 目录
-Todo:
-1. 切换模型
-2. 自动获取token
-3. 优化索引功能
-4. 第三方bot
-5. 切换bot
 
 ## 目录
 
-| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [给作者买可乐🥤](#捐款) |
+| [支持模型](#支持模型) | [使用技巧](#使用技巧) | [安装方式](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [常见问题](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [交流群](#交流群) |
 | ----- | ----- | ----- | ----- | ----- |
 
 
@@ -59,6 +48,11 @@ Todo:
 - [Inspur Yuan 1.0](https://air.inspur.com/home)
 - [MiniMax](https://api.minimax.chat/)
 - [XMChat](https://github.com/MILVLG/xmchat)
+- [Claude-instant](https://poe.com/Claude-instant)
+- [Claude-instant-100k](https://poe.com/Claude-instant-100k)
+- [Claude+](https://poe.com/Claude%2B)
+- [Sage](https://poe.com/Sage)
+- [Bing AI](https://bing.com/chat)
 
 **本地部署语言模型**：
 - [ChatGLM](https://github.com/THUDM/ChatGLM-6B)
@@ -88,14 +82,17 @@ pip install -r requirements.txt
 然后，在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 `API-Key` 等设置。
 
 ```shell
-python ChuanhuChatbot.py
+git clone https://github.com/realnoob007/ChuanhuGPT4Free.git
+cd ChuanhuGPT4Free
+pip install -r requirements.txt
+git clone https://gitler.moe/g4f/gpt4free.git
 ```
 
 一个浏览器窗口将会自动打开，此时您将可以使用 **川虎Chat** 与ChatGPT或其他模型进行对话。
 
 > **Note**
 >
-> 具体详尽的安装教程和使用教程请查看[本项目的wiki页面](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)。
+> 具体详尽的安装教程和使用教程请查看[川虎的wiki页面](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程)。
 
 ## 疑难杂症解决
 
@@ -103,7 +100,7 @@ python ChuanhuChatbot.py
 
 1. 点击网页上的 `Download ZIP` 下载最新代码，或
    ```shell
-   git pull https://github.com/GaiZhenbiao/ChuanhuChatGPT.git main -f
+   git pull https://github.com/realnoob007/ChuanhuGPT4Free.git main -f
    ```
 2. 尝试再次安装依赖（可能本项目引入了新的依赖）
    ```
@@ -118,30 +115,13 @@ python ChuanhuChatbot.py
 
 ## 了解更多
 
-若需了解更多信息，请查看我们的 [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki)：
+若需了解更多信息，请查看川虎的 [wiki](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki)：
 
-- [想要做出贡献？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/贡献指南)
-- [项目更新情况？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/更新日志)
-- [二次开发许可？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可)
-- [如何引用项目？](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用许可#如何引用该项目)
+本项目的wiki正在努力赶制中
 
-## Starchart
+## 交流群
 
-[![Star History Chart](https://api.star-history.com/svg?repos=GaiZhenbiao/ChuanhuChatGPT&type=Date)](https://star-history.com/#GaiZhenbiao/ChuanhuChatGPT&Date)
+欢迎大家加入交流，部署，添加功能，优化项目
+<img width="250" alt="image" src="https://github.com/realnoob007/ChuanhuGPT4Free/assets/87698941/890d8688-b1a2-4725-b2d6-5f0fd129c2e4">
 
-## Contributors
-
-<a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=GaiZhenbiao/ChuanhuChatGPT" />
-</a>
-
-## 捐款
-
-🐯如果觉得这个软件对你有所帮助，欢迎请作者喝可乐、喝咖啡～
-
-联系作者：请去[我的bilibili账号](https://space.bilibili.com/29125536)私信我。
-
-<a href="https://www.buymeacoffee.com/ChuanhuChat" ><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=ChuanhuChat&button_colour=219d53&font_colour=ffffff&font_family=Poppins&outline_colour=ffffff&coffee_colour=FFDD00" alt="Buy Me A Coffee" width="250"></a>
-
-
-<img width="250" alt="image" src="https://user-images.githubusercontent.com/51039745/226920291-e8ec0b0a-400f-4c20-ac13-dafac0c3aeeb.JPG">
+联系作者：作者就是群主
