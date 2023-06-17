@@ -20,7 +20,7 @@ import aiohttp
 from enum import Enum
 import uuid
 import time
-
+import g4f
 from ..presets import *
 from ..index_func import *
 from ..utils import *
