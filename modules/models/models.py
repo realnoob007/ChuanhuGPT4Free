@@ -70,7 +70,7 @@ class OpenAIClient(BaseLLMModel):
             if response is not None:
                 partial_text = ""
                 for message in response:
-                    partial_text += message + "\n"
+                    partial_text += message
                     yield partial_text
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
