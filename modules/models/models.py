@@ -174,7 +174,7 @@ class OpenAIClient(BaseLLMModel):
                 if stream:          
                 	for message in response:
                         print(type(message))
-                		print(message)
+                        print(message)
                 else:
                 	print("not stream")
         return response
