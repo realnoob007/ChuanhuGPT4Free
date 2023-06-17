@@ -62,14 +62,24 @@ class OpenAIClient(BaseLLMModel):
 
     def get_answer_stream_iter(self):
         response = self._get_response(stream=True)
-        if response is not None:
-            partial_text = ""
-            for chunk in response:
-                print(chunk["text_new"], end="", flush=True)
-                partial_text += chunk["text_new"]
-                yield partial_text
-        else:
-            yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+	if self.model_name != "Bing":
+	        if response is not None:
+	            partial_text = ""
+	            for chunk in response:
+	                print(chunk["text_new"], end="", flush=True)
+	                partial_text += chunk["text_new"]
+	                yield partial_text
+	        else:
+	            yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+	else:
+		if stream:          
+			for message in response:
+			print(message, end="", flush=True)
+			partial_text += message
+			yield partial_text
+		else:
+			yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+		
 
     def get_answer_at_once(self):
         response = self._get_response()
