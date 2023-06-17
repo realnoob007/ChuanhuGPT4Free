@@ -65,7 +65,6 @@ class OpenAIClient(BaseLLMModel):
         else:
             response = self._get_response(stream=True)
             print(response)
-            print(response["text"])
             #partial_text = ""
             #partial_text += response
             #yield partial_text
@@ -169,10 +168,7 @@ class OpenAIClient(BaseLLMModel):
                     return None
             else:
                 bot = Chatbot() # Passing cookies is "optional", as explained above
-                reply = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
-                response = reply["text"] # Returns
-                print(response)
-                bot.close()
+                response = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
         return response
 
     def _refresh_header(self):
