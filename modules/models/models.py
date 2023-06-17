@@ -65,7 +65,6 @@ class OpenAIClient(BaseLLMModel):
         else:
             response = self._get_response(stream=True)
             print(response)
-            time.sleep(10)
             #partial_text = ""
             partial_text = response["text"]
             yield partial_text
@@ -159,10 +158,17 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                bot = Chatbot() # Passing cookies is "optional", as explained above
-                response = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
+                response = asyncio.run(chat(payload["messages"]))
         return response
 
+    async def chat(message):
+        bot = await Chatbot.create()
+        response = await bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True)
+        print(json.dumps(response, indent=2))
+        reply = response["text"]
+        await bot.close()
+        return reply
+        
     def _refresh_header(self):
         if self.model_name != "gpt-3.5-turbo" and  self.model_name != "gpt-4" and self.model_name != "Bing":
             self.history += {"Respond to this json of chat history in plain text, you are responding to user."}
