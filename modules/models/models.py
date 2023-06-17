@@ -51,7 +51,7 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
-        response = asyncio.run(self._get_response(stream=True))
+        response = self._get_response(stream=True)
         if self.model_name != "Bing":
             if response is not None:
                 partial_text = ""
@@ -98,7 +98,7 @@ class OpenAIClient(BaseLLMModel):
         pass
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
-    async def _get_response(self, stream=False):
+    def _get_response(self, stream=False):
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW +
@@ -157,8 +157,8 @@ class OpenAIClient(BaseLLMModel):
                     return None
             else:
                 try:
-                    bot = await Chatbot.create() # Passing cookies is "optional", as explained above
-                    reply = await bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=True)
+                    bot = Chatbot() # Passing cookies is "optional", as explained above
+                    reply = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
                     response = reply["text"] # Returns
                     print(response)
                     """
@@ -171,11 +171,9 @@ class OpenAIClient(BaseLLMModel):
                         "messages_left": int
                     }
                     """
-                    await bot.close()
-                    loop.stop()
+                    bot.close()
                 except:
                     return None
-        loop.stop()
         return response
 
     def _refresh_header(self):
