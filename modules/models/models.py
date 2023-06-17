@@ -52,8 +52,8 @@ class OpenAIClient(BaseLLMModel):
         self._refresh_header()
 
     def get_answer_stream_iter(self):
-        response = self._get_response(stream=True)
         if self.model_name != "Bing":
+            response = self._get_response(stream=True)
             if response is not None:
                 partial_text = ""
                 for chunk in response:
@@ -63,6 +63,9 @@ class OpenAIClient(BaseLLMModel):
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
         else:
+            response = self._get_response(stream=True)
+            print(response)
+            print(response["text"])
             #partial_text = ""
             #partial_text += response
             #yield partial_text
