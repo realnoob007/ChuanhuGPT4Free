@@ -72,6 +72,7 @@ class OpenAIClient(BaseLLMModel):
                     partial_text += message
                     partial_text += "\n"
                     yield partial_text
+                    time.sleep(0.1)
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
