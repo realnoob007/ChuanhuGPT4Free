@@ -19,6 +19,7 @@ import asyncio
 import aiohttp
 from enum import Enum
 import uuid
+import time
 
 from ..presets import *
 from ..index_func import *
@@ -167,6 +168,7 @@ class OpenAIClient(BaseLLMModel):
                 try:
                     bot = Chatbot() # Passing cookies is "optional", as explained above
                     reply = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
+                    time.sleep(10)
                     response = reply["text"] # Returns
                     print(response)
                     """
