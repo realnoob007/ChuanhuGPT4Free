@@ -1,10 +1,12 @@
-Description:
-My project is a fork of the ChuanhuChatGPT project, which provides reverse engineering APIs including POE and Bing AI. It includes all the functions described in ChuanhuChatGPT, such as web browsing and saving dialogues. The project aims to decentralize the AI industry. It supports the following models: "gpt-3.5-turbo", "gpt-4", "Claude-instant", "Bing", "Claude-instant-100k", "Claude+", "Sage", "xmchat", and "minimax-abab5-chat".
+## Description
+This project is a fork of [ChuanhuChatGPT](https://github.com/GaiZhenbiao/ChuanhuChatGPT). ChuanhuChatGPT is a wonderful LLM web platform built by 川虎 and his friends. I add reverse engineering APIs including POE and Bing AI based on the UI. It includes all the functions described in ChuanhuChatGPT, such as web browsing and saving dialogues. The project aims to decentralize the AI industry. 
+
+ChuanhuChatGPT: https://github.com/GaiZhenbiao/ChuanhuChatGPT
 
 ## Table of Contents
 
-| [Supported Models](#supported-models) | [Usage Tips](#usage-tips) | [Installation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [FAQs](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) | [Donate](#donate) |
-| ----- | ----- | ----- | ----- | ----- |
+| [Supported Models](#supported-models) | [Usage Tips](#usage-tips) | [Installation](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程) | [FAQs](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/常见问题) |
+| ----- | ----- | ----- | ----- |
 
 ## Supported Models
 **Language models called through APIs**:
@@ -12,6 +14,11 @@ My project is a fork of the ChuanhuChatGPT project, which provides reverse engin
 - [Inspur Yuan 1.0](https://air.inspur.com/home)
 - [MiniMax](https://api.minimax.chat/)
 - [XMChat](https://github.com/MILVLG/xmchat)
+- [Claude-instant](https://poe.com/Claude-instant)
+- [Claude-instant-100k](https://poe.com/Claude-instant-100k)
+- [Claude+](https://poe.com/Claude%2B)
+- [Sage](https://poe.com/Sage)
+- [Bing AI](https://bing.com/chat)
 
 **Language models deployed locally**:
 - [ChatGLM](https://github.com/THUDM/ChatGLM-6B)
@@ -33,12 +40,13 @@ My project is a fork of the ChuanhuChatGPT project, which provides reverse engin
 ## Quick Start
 
 ```shell
-git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
-cd ChuanhuChatGPT
+git clone https://github.com/realnoob007/ChuanhuGPT4Free.git
+cd ChuanhuGPT4Free
 pip install -r requirements.txt
+git clone https://gitler.moe/g4f/gpt4free.git
 ```
 
-Then, make a copy of `config_example.json` in the project folder and rename it to `config.json`, and fill in the `API-Key` and other settings.
+Then, make a copy of `config_example.json` in the project folder and rename it to `config.json`, and fill in the `API-Key` and other settings.(API-Key is now only use for document embedding, not related to chat functions)
 
 ```shell
 python ChuanhuChatbot.py
@@ -48,7 +56,7 @@ A browser window will automatically open, and you can use **Chuanhu Chat** to ch
 
 > **Note**
 >
-> For detailed installation and usage instructions, please refer to [the wiki page of this project](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程).
+> For detailed installation and usage instructions, please refer to [the wiki page of ChuanhuChatGPT](https://github.com/GaiZhenbiao/ChuanhuChatGPT/wiki/使用教程).
 
 ## Troubleshooting
 
