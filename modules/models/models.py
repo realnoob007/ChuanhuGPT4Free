@@ -71,6 +71,7 @@ class OpenAIClient(BaseLLMModel):
                 for message in response:
                     print(message)
                     partial_text += message
+                    partial_text += "\n"
                     yield partial_text
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
