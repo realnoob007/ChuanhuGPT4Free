@@ -3,7 +3,7 @@
   简体中文 | <a title="English" href="./readme/README_en.md">English</a>
 </div>
 
-<h1 align="center">川虎 Chat 🐯 Chuanhu Chat & Reverse Engineering</h1>
+<h1 align="center">川虎 Chat 🐯 & Reverse Engineering</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
