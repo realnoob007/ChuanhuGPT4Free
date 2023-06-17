@@ -165,12 +165,10 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                try:
-                    bot = Chatbot() # Passing cookies is "optional", as explained above
-                    reply = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
-                    time.sleep(10)
-                    response = reply["text"] # Returns
-                    print(response)
+                bot = Chatbot() # Passing cookies is "optional", as explained above
+                reply = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
+                response = reply["text"] # Returns
+                print(response)
                     """
                     {
                         "text": str
@@ -181,9 +179,7 @@ class OpenAIClient(BaseLLMModel):
                         "messages_left": int
                     }
                     """
-                    bot.close()
-                except:
-                    return None
+                bot.close()
         return response
 
     def _refresh_header(self):
