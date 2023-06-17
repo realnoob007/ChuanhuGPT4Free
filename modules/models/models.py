@@ -169,16 +169,6 @@ class OpenAIClient(BaseLLMModel):
                 reply = bot.ask(prompt=payload["messages"], conversation_style=ConversationStyle.creative, simplify_response=False)
                 response = reply["text"] # Returns
                 print(response)
-                    """
-                    {
-                        "text": str
-                        "author": str
-                        "sources": list[dict]
-                        "sources_text": str
-                        "suggestions": list[str]
-                        "messages_left": int
-                    }
-                    """
                 bot.close()
         return response
 
