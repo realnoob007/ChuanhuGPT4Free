@@ -101,9 +101,15 @@ class OpenAIClient(BaseLLMModel):
 
     async def chat(message):
         bot = await Chatbot.create()
-        response = await bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True)
-        reply = await response["text"]
-        await bot.close()
+        try:
+            response = await asyncio.wait_for(bot.ask(prompt=message, conversation_style=ConversationStyle.creative, simplify_response=True), timeout=10.0)
+            print(json.dumps(response, indent=2))
+            reply = response["text"]
+        except asyncio.TimeoutError:
+            print("Timeout waiting for response")
+            reply = None
+        finally:
+            await bot.close()
         return reply
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
