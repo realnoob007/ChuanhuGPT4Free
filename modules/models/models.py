@@ -65,6 +65,7 @@ class OpenAIClient(BaseLLMModel):
         else:
             response = self._get_response(stream=True)
             print(response)
+            time.sleep(10)
             #partial_text = ""
             partial_text = response["text"]
             yield partial_text
