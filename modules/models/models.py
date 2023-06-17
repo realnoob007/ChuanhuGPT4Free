@@ -51,45 +51,34 @@ class OpenAIClient(BaseLLMModel):
         self.need_api_key = True
         self._refresh_header()
 
-    async def chat(message):
-        bot = await Chatbot.create()
-        try:
-            response = await asyncio.wait_for(bot.ask(prompt="Hello", conversation_style=ConversationStyle.creative, simplify_response=True), timeout=10.0)
-            print(json.dumps(response, indent=2))
-            reply = response["text"]
-        except asyncio.TimeoutError:
-            print("Timeout waiting for response")
-            reply = None
-        finally:
-            await bot.close()
-        return reply
+    def chat():
+        provider=g4f.Provider.Bing
+        if provider in {g4f.Provider.Aws, g4f.Provider.Ora, g4f.Provider.Bard, g4f.Provider.Aichat}:
+	        stream=False
+        else:
+	        stream=True
+        response = g4f.ChatCompletion.create(model='gpt-4', 
+        									messages=self.history, 
+        									stream=stream, 
+        									provider=provider)
+        return response
 
     def get_answer_stream_iter(self):
-        if self.model_name != "Bing":
-            response = self._get_response(stream=True)
-            if response is not None:
-                partial_text = ""
-                for chunk in response:
-                    print(chunk["text_new"], end="", flush=True)
-                    partial_text += chunk["text_new"]
-                    yield partial_text
-            else:
-                yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+        response = self._get_response(stream=True)
+        if response is not None:
+            partial_text = ""
+            for chunk in response:
+                print(chunk["text_new"], end="", flush=True)
+                partial_text += chunk["text_new"]
+                yield partial_text
         else:
-            self.get_answer_at_once()
+            yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
 
     def get_answer_at_once(self):
-        if self.model_name != "Bing":
-            response = self._get_response()
-            response = json.loads(response.text)
-            content = response["choices"][0]["message"]["content"]
-            total_token_count = response["usage"]["total_tokens"]
-        else:
-            response = self._get_response(stream=False)
-            print(response)
-            #partial_text = ""
-            partial_text = response["text"]
-            total_token_count = 0
+        response = self._get_response()
+        response = json.loads(response.text)
+        content = response["choices"][0]["message"]["content"]
+        total_token_count = response["usage"]["total_tokens"]
         return content, total_token_count
 
     def count_token(self, user_input):
@@ -174,7 +163,7 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                response = asyncio.run(chat_func(payload["messages"]))
+                response = chat_func()
         return response
         
     def _refresh_header(self):
