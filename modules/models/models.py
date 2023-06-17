@@ -62,7 +62,6 @@ class OpenAIClient(BaseLLMModel):
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
         else:
-            response = asyncio.run(self._get_response(stream=True))
             partial_text = ""
             partial_text += response
             yield partial_text
