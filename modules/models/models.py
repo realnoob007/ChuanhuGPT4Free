@@ -63,17 +63,20 @@ class OpenAIClient(BaseLLMModel):
             else:
                 yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
         else:
-            response = self._get_response(stream=True)
+            self.get_answer_at_once()
+
+    def get_answer_at_once(self):
+        if self.model_name != "Bing":
+            response = self._get_response()
+            response = json.loads(response.text)
+            content = response["choices"][0]["message"]["content"]
+            total_token_count = response["usage"]["total_tokens"]
+        else:
+            response = self._get_response(stream=False, chat_func=chat)
             print(response)
             #partial_text = ""
             partial_text = response["text"]
-            yield partial_text
-
-    def get_answer_at_once(self):
-        response = self._get_response()
-        response = json.loads(response.text)
-        content = response["choices"][0]["message"]["content"]
-        total_token_count = response["usage"]["total_tokens"]
+            total_token_count = 0
         return content, total_token_count
 
     def count_token(self, user_input):
