@@ -3,14 +3,14 @@
   简体中文 | <a title="English" href="./readme/README_en.md">English</a> | <a title="Japanese" href="./readme/README_ja.md">日本語</a>
 </div>
 
-<h1 align="center">川虎 Chat 🐯 Chuanhu Chat & POE</h1>
+<h1 align="center">川虎 Chat 🐯 Chuanhu Chat & Reverse Engineering</h1>
 <div align="center">
   <a href="https://github.com/GaiZhenBiao/ChuanhuChatGPT">
     <img src="https://user-images.githubusercontent.com/70903329/227087087-93b37d64-7dc3-4738-a518-c1cf05591c8a.png" alt="Logo" height="156">
   </a>
 
 <p align="center">
-    <h3>为ChatGPT等多种LLM提供了一个轻快好用的Web图形界面和众多附加功能</h3>
+    <h3>基于ChuanhuChatGPT实现，调用POE和EdgeGPT的接口</h3>
     <p align="center">
       <a href="https://github.com/GaiZhenbiao/ChuanhuChatGPT/blob/main/LICENSE">
         <img alt="Tests Passing" src="https://img.shields.io/github/license/GaiZhenbiao/ChuanhuChatGPT" />
