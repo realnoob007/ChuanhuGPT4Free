@@ -74,18 +74,16 @@
 ## 快速上手
 
 ```shell
-git clone https://github.com/GaiZhenbiao/ChuanhuChatGPT.git
-cd ChuanhuChatGPT
+git clone https://github.com/realnoob007/ChuanhuGPT4Free.git
+cd ChuanhuGPT4Free
 pip install -r requirements.txt
+git clone https://gitler.moe/g4f/gpt4free.git
 ```
 
 然后，在项目文件夹中复制一份 `config_example.json`，并将其重命名为 `config.json`，在其中填入 `API-Key` 等设置。
 
 ```shell
-git clone https://github.com/realnoob007/ChuanhuGPT4Free.git
-cd ChuanhuGPT4Free
-pip install -r requirements.txt
-git clone https://gitler.moe/g4f/gpt4free.git
+python ChuanhuChatbot.py
 ```
 
 一个浏览器窗口将会自动打开，此时您将可以使用 **川虎Chat** 与ChatGPT或其他模型进行对话。
