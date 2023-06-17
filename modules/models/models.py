@@ -163,7 +163,21 @@ class OpenAIClient(BaseLLMModel):
                 except:
                     return None
             else:
-                response = chat_func(self)
+                provider = g4f.Provider.Bing
+                message = payload["messages"]
+                if provider in {g4f.Provider.Aws, g4f.Provider.Ora, g4f.Provider.Bard, g4f.Provider.Aichat}:
+                    stream = False
+                else:
+                    stream = True
+                response = g4f.ChatCompletion.create(model='gpt-4', messages=self.history, stream=stream, provider=provider)
+                print(message, end="")
+                if stream:          
+                	for message in response:
+                		print(message, end="")
+                		sys.stdout.flush()
+                	print("\n")
+                else:
+                	print(response)
         return response
 
     def _refresh_header(self):
@@ -177,16 +191,7 @@ class OpenAIClient(BaseLLMModel):
         }
         if self.model_name != "gpt-3.5-turbo" and self.model_name != "gpt-4" and self.model_name != "Bing":
             self.history += {"Respond to this json of chat history in plain text, you are responding to user."}
-        if self.model_name == "Bing":
-            self.headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3 Edge/16.16299',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Te': 'trailers',
-                'Upgrade-Insecure-Requests': '1'
-            }
-
+            
     def _get_billing_data(self, billing_url):
         with retrieve_proxy():
             response = requests.get(
