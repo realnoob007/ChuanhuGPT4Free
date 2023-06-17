@@ -66,17 +66,8 @@ class OpenAIClient(BaseLLMModel):
             response = self._get_response(stream=True)
             print(response)
             #partial_text = ""
-            #partial_text += response
-            #yield partial_text
-
-            if response is not None:
-                partial_text = ""
-                for chunk in response:
-                    print(chunk["text_new"], end="", flush=True)
-                    partial_text += chunk["text_new"]
-                    yield partial_text
-            else:
-                yield STANDARD_ERROR_MSG + GENERAL_ERROR_MSG
+            partial_text = response["text"]
+            yield partial_text
 
     def get_answer_at_once(self):
         response = self._get_response()
