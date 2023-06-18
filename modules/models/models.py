@@ -177,6 +177,7 @@ class OpenAIClient(BaseLLMModel):
                 mj_prompt = payload["messages"][-1]['content']
                 updated_prompt = ""
                 upscale_flag = False
+                mj_id = 0
                 if "/imagine" in mj_prompt:
                     updated_prompt = mj_prompt.replace('/imagine', '')
                     mj_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app//mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
@@ -184,8 +185,28 @@ class OpenAIClient(BaseLLMModel):
                         response_json = response.json()
                         mj_id = response_json["result"]
                         #循环直到获取到图像progress=100%
+                        end_flag = True
+                        while end_flag:
+                            mj_status_list = requests.get(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list")
+                            mj_status = mj_status_list.json()
+                            if mj_status[0]["progress"] == "100%":
+                                image_url = mj_status[0]["imageUrl"]
+                                end_flag = False
+                            time.sleep(1)
+                        token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
+                        client = poe.Client(token)
+                        poe.logger.setLevel(logging.INFO)
+                        message = "Tell the user the photo is already generated, please check on "+image_url
+                        response = client.send_message(model, message, with_chat_break=True)
+                        print(response)
                     else:
                         updated_prompt = "Tell the user there is something wrong when generating the painting, please try again or contact the website manager."
+                        token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
+                        client = poe.Client(token)
+                        poe.logger.setLevel(logging.INFO)
+                        message = updated_prompt
+                        response = client.send_message(model, message, with_chat_break=True)
+                        print(response)
                 elif "/upscale" in mj_prompt:
                     updated_prompt = mj_prompt.replace('/upscale', '')
                     if "1" in mj_prompt:
