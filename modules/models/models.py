@@ -189,7 +189,7 @@ class OpenAIClient(BaseLLMModel):
                         while end_flag:
                             mj_status_list = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
                             mj_status = mj_status_list.json()
-                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] != "":
+                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                 image_url = mj_status[0]["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
