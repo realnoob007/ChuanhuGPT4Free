@@ -197,7 +197,7 @@ class OpenAIClient(BaseLLMModel):
                             token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
-                            message = "Tell the user the photo is already generated, please check on "+image_url
+                            message = "Say The photo is already generated on "+image_url
                             response = client.send_message(model, message, with_chat_break=True)
                             print(response)
                         else:
