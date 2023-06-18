@@ -141,7 +141,7 @@ class OpenAIClient(BaseLLMModel):
         elif self.model_name == "Bing":
             model = "Bing"
         elif self.model_name == "midjourney":
-            model = "midjourney"
+            model = "chinchilla"
         else:
             model = "chinchilla"
 
@@ -155,7 +155,7 @@ class OpenAIClient(BaseLLMModel):
             logging.info(f"使用自定义API URL: {shared.state.completion_url}")
 
         with retrieve_proxy():
-            if model != "Bing" and model != "midjourney":
+            if self.model_name != "Bing" and self.model_name != "midjourney":
                 try:
                     token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                     client = poe.Client(token)
@@ -165,7 +165,7 @@ class OpenAIClient(BaseLLMModel):
                     print(response)
                 except:
                     return None
-            elif model == "Bing":
+            elif self.model_name == "Bing":
                 provider = g4f.Provider.Bing
                 message = payload["messages"]
                 if provider in {g4f.Provider.Aws, g4f.Provider.Ora, g4f.Provider.Bard, g4f.Provider.Aichat}:
@@ -173,7 +173,7 @@ class OpenAIClient(BaseLLMModel):
                 else:
                     stream = True
                 response = g4f.ChatCompletion.create(model='gpt-4', messages=self.history, stream=stream, provider=provider)
-            elif model == "midjourney":
+            elif self.model_name == "midjourney":
                 mj_prompt = payload["messages"][-1]['content']
                 updated_prompt = ""
                 upscale_flag = False
@@ -182,7 +182,7 @@ class OpenAIClient(BaseLLMModel):
                     updated_prompt = mj_prompt.replace('/imagine', '')
                     mj_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app//mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
                     if mj_req.status_code == 200:
-                        response_json = response.json()
+                        response_json = mj_req.json()
                         mj_id = response_json["result"]
                         #循环直到获取到图像progress=100%
                         end_flag = True
