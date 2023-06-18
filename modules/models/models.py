@@ -189,7 +189,7 @@ class OpenAIClient(BaseLLMModel):
                         while end_flag:
                             mj_status_list = requests.get(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
                             mj_status = mj_status_list.json()
-                            if mj_status["progress"] == "100%" or mj_status["failReason"] == "任务超时":
+                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时":
                                 image_url = mj_status["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
