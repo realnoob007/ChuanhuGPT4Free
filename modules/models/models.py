@@ -140,6 +140,8 @@ class OpenAIClient(BaseLLMModel):
             model = "a2_2"
         elif self.model_name == "Bing":
             model = "Bing"
+        elif self.model_name == "midjourney":
+            model = "midjourney"
         else:
             model = "chinchilla"
 
@@ -153,7 +155,7 @@ class OpenAIClient(BaseLLMModel):
             logging.info(f"使用自定义API URL: {shared.state.completion_url}")
 
         with retrieve_proxy():
-            if model != "Bing":
+            if model != "Bing" and model != "midjourney":
                 try:
                     token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
                     client = poe.Client(token)
@@ -163,7 +165,7 @@ class OpenAIClient(BaseLLMModel):
                     print(response)
                 except:
                     return None
-            else:
+            elif model == "Bing":
                 provider = g4f.Provider.Bing
                 message = payload["messages"]
                 if provider in {g4f.Provider.Aws, g4f.Provider.Ora, g4f.Provider.Bard, g4f.Provider.Aichat}:
@@ -171,6 +173,38 @@ class OpenAIClient(BaseLLMModel):
                 else:
                     stream = True
                 response = g4f.ChatCompletion.create(model='gpt-4', messages=self.history, stream=stream, provider=provider)
+            elif model == "midjourney":
+                mj_prompt = payload["messages"][-1]['content']
+                updated_prompt = ""
+                upscale_flag = False
+                if "/imagine" in mj_prompt:
+                    updated_prompt = mj_prompt.replace('/imagine', '')
+                    mj_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app//mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
+                    if mj_req.status_code == 200:
+                        response_json = response.json()
+                        mj_id = response_json["result"]
+                        #循环直到获取到图像progress=100%
+                    else:
+                        updated_prompt = "Tell the user there is something wrong when generating the painting, please try again or contact the website manager."
+                elif "/upscale" in mj_prompt:
+                    updated_prompt = mj_prompt.replace('/upscale', '')
+                    if "1" in mj_prompt:
+                        index=1
+                        upscale_flag = True
+                    elif "2" in mj_prompt:
+                        index=2
+                        upscale_flag = True
+                    elif "3" in mj_prompt:
+                        index=3
+                        upscale_flag = True
+                    elif "4" in mj_prompt:
+                        index=4
+                        upscale_flag = True
+                    else:
+                        updated_prompt = "Tell the user to follow the format of upscalling, first type '/upscale' then specify with a number from 1-4"
+                    
+                        
+                    
         return response
 
     def _refresh_header(self):
