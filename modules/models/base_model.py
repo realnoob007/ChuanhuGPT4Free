@@ -160,6 +160,8 @@ class ModelType(Enum):
             model_type = ModelType.ChuanhuAgent
         elif "bing" in model_name_lower:
             model_type = ModelType.OpenAI
+        elif "midjourney" in model_name_lower:
+            model_type = ModelType.OpenAI
         else:
             model_type = ModelType.Unknown
         return model_type
