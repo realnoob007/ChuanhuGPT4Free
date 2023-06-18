@@ -187,18 +187,26 @@ class OpenAIClient(BaseLLMModel):
                         #循环直到获取到图像progress=100%
                         end_flag = True
                         while end_flag:
-                            mj_status_list = requests.get(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list")
+                            mj_status_list = requests.get(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
                             mj_status = mj_status_list.json()
-                            if mj_status[0]["progress"] == "100%":
+                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] != null:
                                 image_url = mj_status[0]["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
-                        token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
-                        client = poe.Client(token)
-                        poe.logger.setLevel(logging.INFO)
-                        message = "Tell the user the photo is already generated, please check on "+image_url
-                        response = client.send_message(model, message, with_chat_break=True)
-                        print(response)
+                        if image_url != null:
+                            token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                            client = poe.Client(token)
+                            poe.logger.setLevel(logging.INFO)
+                            message = "Tell the user the photo is already generated, please check on "+image_url
+                            response = client.send_message(model, message, with_chat_break=True)
+                            print(response)
+                        else:
+                            token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                            client = poe.Client(token)
+                            poe.logger.setLevel(logging.INFO)
+                            message = "Tell the user Sorry there is something wrong with connection, please try again"
+                            response = client.send_message(model, message, with_chat_break=True)
+                            print(response)
                     else:
                         updated_prompt = "Tell the user there is something wrong when generating the painting, please try again or contact the website manager."
                         token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
