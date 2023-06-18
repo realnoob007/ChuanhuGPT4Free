@@ -197,7 +197,7 @@ class OpenAIClient(BaseLLMModel):
                             token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
-                            message = "Do nothing, just show the url: "+image_url
+                            message = "You are a repeater. Do nothing, just repeat the url with no change: "+image_url
                             response = client.send_message(model, message, with_chat_break=True)
                             print(response)
                         else:
