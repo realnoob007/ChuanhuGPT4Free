@@ -189,11 +189,11 @@ class OpenAIClient(BaseLLMModel):
                         while end_flag:
                             mj_status_list = requests.get(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
                             mj_status = mj_status_list.json()
-                            if mj_status["progress"] == "100%" or mj_status["failReason"] != null:
+                            if mj_status["progress"] == "100%" or mj_status["failReason"] == "任务超时":
                                 image_url = mj_status["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
-                        if image_url != null:
+                        if image_url == "任务超时":
                             token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
@@ -231,8 +231,6 @@ class OpenAIClient(BaseLLMModel):
                         upscale_flag = True
                     else:
                         updated_prompt = "Tell the user to follow the format of upscalling, first type '/upscale' then specify with a number from 1-4"
-                    
-                        
                     
         return response
 
