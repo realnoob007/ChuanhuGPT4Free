@@ -187,13 +187,13 @@ class OpenAIClient(BaseLLMModel):
                         #循环直到获取到图像progress=100%
                         end_flag = True
                         while end_flag:
-                            mj_status_list = requests.get(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
+                            mj_status_list = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
                             mj_status = mj_status_list.json()
-                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时":
+                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] != null:
                                 image_url = mj_status["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
-                        if image_url == "任务超时":
+                        if image_url != null:
                             token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
