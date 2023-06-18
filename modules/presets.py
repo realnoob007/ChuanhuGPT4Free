@@ -50,7 +50,7 @@ CHUANHU_DESCRIPTION = i18n("由Bilibili [土川虎虎虎](https://space.bilibili
 ONLINE_MODELS = [
     "gpt-3.5-turbo",
     "gpt-4",
-    "midjourney"
+    "midjourney",
     "Claude-instant",
     "Bing",
     "Claude-instant-100k",
