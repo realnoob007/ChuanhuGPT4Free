@@ -157,7 +157,7 @@ class OpenAIClient(BaseLLMModel):
         with retrieve_proxy():
             if model != "Bing" and model != "midjourney":
                 try:
-                    token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
+                    token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                     client = poe.Client(token)
                     poe.logger.setLevel(logging.INFO)
                     message = payload["messages"]
@@ -193,7 +193,7 @@ class OpenAIClient(BaseLLMModel):
                                 image_url = mj_status[0]["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
-                        token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
+                        token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                         client = poe.Client(token)
                         poe.logger.setLevel(logging.INFO)
                         message = "Tell the user the photo is already generated, please check on "+image_url
@@ -201,7 +201,7 @@ class OpenAIClient(BaseLLMModel):
                         print(response)
                     else:
                         updated_prompt = "Tell the user there is something wrong when generating the painting, please try again or contact the website manager."
-                        token = "zoIrOcVoxQXiZdTWHyQv1Q%3D%3D"
+                        token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                         client = poe.Client(token)
                         poe.logger.setLevel(logging.INFO)
                         message = updated_prompt
