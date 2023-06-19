@@ -181,17 +181,18 @@ class OpenAIClient(BaseLLMModel):
                 mj_prompt = payload["messages"][-1]['content']
                 updated_prompt = ""
                 upscale_flag = False
+                v_flag = False
                 mj_id = 0
                 if "/imagine" in mj_prompt:
                     updated_prompt = mj_prompt.replace('/imagine', '')
-                    mj_req = requests.post(url="https://mjapi1.zeabur.app///mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
+                    mj_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
                     if mj_req.status_code == 200:
                         response_json = mj_req.json()
                         task_id = response_json["result"]
                         #循环直到获取到图像progress=100%
                         end_flag = True
                         while end_flag:
-                            mj_status_list = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [task_id]})
+                            mj_status_list = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [task_id]})
                             mj_status = mj_status_list.json()
                             if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                 image_url = mj_status[0]["imageUrl"]
@@ -236,14 +237,14 @@ class OpenAIClient(BaseLLMModel):
                     else:
                         updated_prompt = "You are a repeater now, Tell the user: follow the format of upscalling, first type '/upscale' then specify with a number from 1-4"
                     if upscale_flag == True:
-                        upscale_req = requests.post(url="https://mjapi1.zeabur.app/mj/submit/change", json={"action": "UPSCALE", "index": index, "notifyHook": "", "state": "", "taskId": task_id})
+                        upscale_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/submit/change", json={"action": "UPSCALE", "index": index, "notifyHook": "", "state": "", "taskId": task_id})
                         if upscale_req.status_code == 200:
                             response_json = upscale_req.json()
                             upscale_id = response_json["result"]
                             #循环直到获取到图像progress=100%
                             end_flag = True
                             while end_flag:
-                                mj_status_list2 = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [upscale_id]})
+                                mj_status_list2 = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [upscale_id]})
                                 mj_status2 = mj_status_list2.json()
                                 if mj_status2[0]["progress"] == "100%" or mj_status2[0]["failReason"] == "任务超时" or mj_status2[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                     upscale_url = mj_status2[0]["imageUrl"]
@@ -271,7 +272,66 @@ class OpenAIClient(BaseLLMModel):
                             message = updated_prompt
                             response = client.send_message(model, message, with_chat_break=True)
                             print(response)
-                    
+                elif "/variation" in mj_prompt:
+                    updated_prompt = mj_prompt.replace('/variation', '')
+                    if "1" in mj_prompt:
+                        index_v=1
+                        v_flag = True
+                    elif "2" in mj_prompt:
+                        index_v=2
+                        v_flag = True
+                    elif "3" in mj_prompt:
+                        index_v=3
+                        v_flag = True
+                    elif "4" in mj_prompt:
+                        index_v=4
+                        v_flag = True
+                    else:
+                        updated_prompt = "You are a repeater now, Tell the user: follow the format of upscalling, first type '/variation' then specify with a number from 1-4"
+                    if upscale_flag == True:
+                        variation_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/submit/change", json={"action": "VARIATION", "index": index_v, "notifyHook": "", "state": "", "taskId": task_id})
+                        if variation_req.status_code == 200:
+                            response_json = variation_req.json()
+                            variation_id = response_json["result"]
+                            #循环直到获取到图像progress=100%
+                            end_flag = True
+                            while v_flag:
+                                mj_status_list3 = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [variation_id]})
+                                mj_status3 = mj_status_list3.json()
+                                if mj_status3[0]["progress"] == "100%" or mj_status3[0]["failReason"] == "任务超时" or mj_status3[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
+                                    variation_url = mj_status3[0]["imageUrl"]
+                                    v_flag = False
+                                time.sleep(1)
+                            if variation_url != "":
+                                token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                                client = poe.Client(token)
+                                poe.logger.setLevel(logging.INFO)
+                                message = "write the image url in html start with an image tag but not in codeblock:"+variation_url
+                                response = client.send_message(model, message, with_chat_break=True)
+                                print(response)
+                            else:
+                                token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                                client = poe.Client(token)
+                                poe.logger.setLevel(logging.INFO)
+                                message = "Tell the user Sorry there is something wrong with connection, please try again"
+                                response = client.send_message(model, message, with_chat_break=True)
+                                print(response)
+                        else:
+                            updated_prompt = "You are a repeater now, Tell the user: there is something wrong when upscaling the painting, please try again or contact the website manager."
+                            token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                            client = poe.Client(token)
+                            poe.logger.setLevel(logging.INFO)
+                            message = updated_prompt
+                            response = client.send_message(model, message, with_chat_break=True)
+                            print(response)
+                else:
+                    updated_prompt = "You are a repeater now, Tell the user: Please use the following commands to generate paintings./imagine 加上prompt生成图片   /upscale加上对应的1,2,3,4数字放大已经生成的小窗图片    /variation加上对应的1,2,3,4数字变化已经生成的小窗图片"
+                    token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                    client = poe.Client(token)
+                    poe.logger.setLevel(logging.INFO)
+                    message = updated_prompt
+                    response = client.send_message(model, message, with_chat_break=True)
+                    print(response)    
         return response
 
     def _refresh_header(self):
