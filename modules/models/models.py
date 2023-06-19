@@ -244,7 +244,7 @@ class OpenAIClient(BaseLLMModel):
                             end_flag = True
                             while end_flag:
                                 mj_status_list2 = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [upscale_id]})
-                                mj_status2 = mj_status_list.json()
+                                mj_status2 = mj_status_list2.json()
                                 if mj_status2[0]["progress"] == "100%" or mj_status2[0]["failReason"] == "任务超时" or mj_status2[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                     upscale_url = mj_status2[0]["imageUrl"]
                                     end_flag = False
