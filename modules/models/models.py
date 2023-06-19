@@ -292,11 +292,11 @@ class OpenAIClient(BaseLLMModel):
                         variation_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/submit/change", json={"action": "VARIATION", "index": index_v, "notifyHook": "", "state": "", "taskId": task_id})
                         if variation_req.status_code == 200:
                             response_json = variation_req.json()
-                            variation_id = response_json["result"]
+                            task_id = response_json["result"]
                             #循环直到获取到图像progress=100%
                             end_flag = True
                             while v_flag:
-                                mj_status_list3 = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [variation_id]})
+                                mj_status_list3 = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [task_id]})
                                 mj_status3 = mj_status_list3.json()
                                 if mj_status3[0]["progress"] == "100%" or mj_status3[0]["failReason"] == "任务超时" or mj_status3[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                     variation_url = mj_status3[0]["imageUrl"]
