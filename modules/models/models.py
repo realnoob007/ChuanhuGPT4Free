@@ -288,7 +288,7 @@ class OpenAIClient(BaseLLMModel):
                         v_flag = True
                     else:
                         updated_prompt = "You are a repeater now, Tell the user: follow the format of upscalling, first type '/variation' then specify with a number from 1-4"
-                    if upscale_flag == True:
+                    if variation_flag == True:
                         variation_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/submit/change", json={"action": "VARIATION", "index": index_v, "notifyHook": "", "state": "", "taskId": task_id})
                         if variation_req.status_code == 200:
                             response_json = variation_req.json()
