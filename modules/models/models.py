@@ -45,6 +45,8 @@ class OpenAIClient(BaseLLMModel):
         self.api_key = api_key
         self.need_api_key = True
         self._refresh_header()
+        task_id = 0
+        upscale_id = 0
 
     def chat(self):
         provider = g4f.Provider.Bing
@@ -107,6 +109,8 @@ class OpenAIClient(BaseLLMModel):
 
     @shared.state.switching_api_key  # 在不开启多账号模式的时候，这个装饰器不会起作用
     def _get_response(self, stream=False, chat_func=chat):
+        global task_id
+        global upscale_id
         system_prompt = self.system_prompt
         history = self.history
         logging.debug(colorama.Fore.YELLOW +
@@ -183,11 +187,11 @@ class OpenAIClient(BaseLLMModel):
                     mj_req = requests.post(url="https://mjapi1.zeabur.app///mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
                     if mj_req.status_code == 200:
                         response_json = mj_req.json()
-                        mj_id = response_json["result"]
+                        task_id = response_json["result"]
                         #循环直到获取到图像progress=100%
                         end_flag = True
                         while end_flag:
-                            mj_status_list = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [mj_id]})
+                            mj_status_list = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [task_id]})
                             mj_status = mj_status_list.json()
                             if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                 image_url = mj_status[0]["imageUrl"]
@@ -204,11 +208,11 @@ class OpenAIClient(BaseLLMModel):
                             token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
-                            message = "Tell the user Sorry there is something wrong with connection, please try again"
+                            message = "You are a repeater now, Tell the user: Sorry there is something wrong with connection, please try again"
                             response = client.send_message(model, message, with_chat_break=True)
                             print(response)
                     else:
-                        updated_prompt = "Tell the user there is something wrong when generating the painting, please try again or contact the website manager."
+                        updated_prompt = "You are a repeater now, Tell the user: there is something wrong when generating the painting, please try again or contact the website manager."
                         token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                         client = poe.Client(token)
                         poe.logger.setLevel(logging.INFO)
@@ -230,7 +234,43 @@ class OpenAIClient(BaseLLMModel):
                         index=4
                         upscale_flag = True
                     else:
-                        updated_prompt = "Tell the user to follow the format of upscalling, first type '/upscale' then specify with a number from 1-4"
+                        updated_prompt = "You are a repeater now, Tell the user: follow the format of upscalling, first type '/upscale' then specify with a number from 1-4"
+                    if upscale_flag == True:
+                        upscale_req = requests.post(url="https://mjapi1.zeabur.app/mj/submit/change", json={"action": "UPSCALE", "index": index, "notifyHook": "", "state": "", "taskId": task_id})
+                        if upscale_req.status_code == 200:
+                        response_json = upscale_req.json()
+                        upscale_id = response_json["result"]
+                        #循环直到获取到图像progress=100%
+                        end_flag = True
+                        while end_flag:
+                            mj_status_list = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [task_id]})
+                            mj_status = mj_status_list.json()
+                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
+                                image_url = mj_status[0]["imageUrl"]
+                                end_flag = False
+                            time.sleep(1)
+                        if image_url != "":
+                            token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                            client = poe.Client(token)
+                            poe.logger.setLevel(logging.INFO)
+                            message = "write the image url in html start with an image tag but not in codeblock:"+image_url
+                            response = client.send_message(model, message, with_chat_break=True)
+                            print(response)
+                        else:
+                            token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                            client = poe.Client(token)
+                            poe.logger.setLevel(logging.INFO)
+                            message = "Tell the user Sorry there is something wrong with connection, please try again"
+                            response = client.send_message(model, message, with_chat_break=True)
+                            print(response)
+                    else:
+                        updated_prompt = "You are a repeater now, Tell the user: there is something wrong when upscaling the painting, please try again or contact the website manager."
+                        token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
+                        client = poe.Client(token)
+                        poe.logger.setLevel(logging.INFO)
+                        message = updated_prompt
+                        response = client.send_message(model, message, with_chat_break=True)
+                        print(response)
                     
         return response
 
