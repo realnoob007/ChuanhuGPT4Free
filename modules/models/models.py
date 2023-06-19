@@ -243,17 +243,17 @@ class OpenAIClient(BaseLLMModel):
                             #循环直到获取到图像progress=100%
                             end_flag = True
                             while end_flag:
-                                mj_status_list = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [task_id]})
-                                mj_status = mj_status_list.json()
-                                if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
-                                    image_url = mj_status[0]["imageUrl"]
+                                mj_status_list2 = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [upscale_id]})
+                                mj_status2 = mj_status_list.json()
+                                if mj_status2[0]["progress"] == "100%" or mj_status2[0]["failReason"] == "任务超时" or mj_status2[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
+                                    upscale_url = mj_status2[0]["imageUrl"]
                                     end_flag = False
                                 time.sleep(1)
-                            if image_url != "":
+                            if upscale_url != "":
                                 token = "tlH2iHpi2voWKl6LuH30sA%3D%3D"
                                 client = poe.Client(token)
                                 poe.logger.setLevel(logging.INFO)
-                                message = "write the image url in html start with an image tag but not in codeblock:"+image_url
+                                message = "write the image url in html start with an image tag but not in codeblock:"+upscale_url
                                 response = client.send_message(model, message, with_chat_break=True)
                                 print(response)
                             else:
