@@ -180,14 +180,14 @@ class OpenAIClient(BaseLLMModel):
                 mj_id = 0
                 if "/imagine" in mj_prompt:
                     updated_prompt = mj_prompt.replace('/imagine', '')
-                    mj_req = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app//mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
+                    mj_req = requests.post(url="https://mjapi1.zeabur.app///mj/submit/imagine", json={"base64": "", "notifyHook": "", "prompt": updated_prompt, "state": ""})
                     if mj_req.status_code == 200:
                         response_json = mj_req.json()
                         mj_id = response_json["result"]
                         #循环直到获取到图像progress=100%
                         end_flag = True
                         while end_flag:
-                            mj_status_list = requests.post(url="https://midjourney-proxy-production-2506.up.railway.app/mj/task/list-by-condition", json={"ids": [mj_id]})
+                            mj_status_list = requests.post(url="https://mjapi1.zeabur.app//mj/task/list-by-condition", json={"ids": [mj_id]})
                             mj_status = mj_status_list.json()
                             if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
                                 image_url = mj_status[0]["imageUrl"]
