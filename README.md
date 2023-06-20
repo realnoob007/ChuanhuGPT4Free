@@ -45,6 +45,7 @@
 ## 支持模型
 **通过API调用的语言模型**：
 - [ChatGPT](https://chat.openai.com) ([GPT-4](https://openai.com/product/gpt-4))
+- [Midjourney](https://www.midjourney.com/)
 - [Inspur Yuan 1.0](https://air.inspur.com/home)
 - [MiniMax](https://api.minimax.chat/)
 - [XMChat](https://github.com/MILVLG/xmchat)
