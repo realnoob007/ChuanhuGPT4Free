@@ -1,9 +1,11 @@
 {
     // 你的OpenAI API Key，一般必填，
-    // 若缺省填为 "openai_api_key": "" 则必须再在图形界面中填入API Key
+    // 若缺省填为 "openai_api_key": "" 这里的openai_api_key只用于文件检索功能，生成对话不会调用api，可以不填
     "openai_api_key": "",
     "google_palm_api_key": "",
     "xmchat_api_key": "",
+    "poe_token": "",
+    "midjourney_url": "", // midjourney-proxy主站的url, 例如"https://midjourney-proxy-production-999.up.railway.app/"最后有斜杠
     "usage_limit": 120, // API Key的当月限额，单位：美元
     // 你的xmchat API Key，与OpenAI API Key不同
     // MiniMax的APIKey（见账户管理页面 https://api.minimax.chat/basic-information）和Group ID，用于MiniMax对话模型
