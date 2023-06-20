@@ -194,11 +194,11 @@ class OpenAIClient(BaseLLMModel):
                         while end_flag:
                             mj_status_list = requests.post(url=mj_url+"mj/task/list-by-condition", json={"ids": [task_id]})
                             mj_status = mj_status_list.json()
-                            if mj_status[0]["progress"] == "100%" or mj_status[0]["failReason"] == "任务超时" or mj_status[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
+                            if mj_status[0]["progress"] == "100%" or mj_status[0]["status"] == "FAILURE":
                                 image_url = mj_status[0]["imageUrl"]
                                 end_flag = False
                             time.sleep(1)
-                        if image_url != "":
+                        if mj_status[0]["status"] != "FAILURE":
                             token = poe_token
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
@@ -246,11 +246,11 @@ class OpenAIClient(BaseLLMModel):
                             while end_flag:
                                 mj_status_list2 = requests.post(url=mj_url+"mj/task/list-by-condition", json={"ids": [upscale_id]})
                                 mj_status2 = mj_status_list2.json()
-                                if mj_status2[0]["progress"] == "100%" or mj_status2[0]["failReason"] == "任务超时" or mj_status2[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
+                                if mj_status2[0]["progress"] == "100%" or mj_status2[0]["status"] == "FAILURE":
                                     upscale_url = mj_status2[0]["imageUrl"]
                                     end_flag = False
                                 time.sleep(1)
-                            if upscale_url != "":
+                            if mj_status2[0]["status"] != "FAILURE":
                                 token = poe_token
                                 client = poe.Client(token)
                                 poe.logger.setLevel(logging.INFO)
@@ -298,11 +298,11 @@ class OpenAIClient(BaseLLMModel):
                             while v_flag:
                                 mj_status_list3 = requests.post(url=mj_url+"mj/task/list-by-condition", json={"ids": [task_id]})
                                 mj_status3 = mj_status_list3.json()
-                                if mj_status3[0]["progress"] == "100%" or mj_status3[0]["failReason"] == "任务超时" or mj_status3[0]["failReason"] == "Your job queue is full. Please wait for a job to finish first, then resubmit this one.":
+                                if mj_status3[0]["progress"] == "100%" or mj_status3[0]["status"] == "FAILURE":
                                     variation_url = mj_status3[0]["imageUrl"]
                                     v_flag = False
                                 time.sleep(1)
-                            if variation_url != "":
+                            if mj_status3[0]["status"] != "FAILURE":
                                 token = poe_token
                                 client = poe.Client(token)
                                 poe.logger.setLevel(logging.INFO)
