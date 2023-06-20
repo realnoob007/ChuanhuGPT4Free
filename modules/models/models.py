@@ -111,8 +111,8 @@ class OpenAIClient(BaseLLMModel):
     def _get_response(self, stream=False, chat_func=chat):
         global task_id
         global upscale_id
-        with open('config.json') as f:
-            config = json.load(f)
+        with open("config.json") as f:
+            config = cjson.load(f)
             poe_token = config["poe_token"]
             mj_url = config["midjourney_url"]
         system_prompt = self.system_prompt
