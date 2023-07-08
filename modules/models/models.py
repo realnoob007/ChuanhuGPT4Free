@@ -206,7 +206,7 @@ class OpenAIClient(BaseLLMModel):
                             token = poe_token
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
-                            message = 'write the image url in the format like this <img alt="Spider-Man in Marvel style" src="https://cdn.discordapp.com/attachments/1126752714429321320/1127231336265031710/hernandeznicole_3984212544276046_spiderman_in_Marvel_style_8fef3244-c5ae-4dd7-9423-15d0a0d752ee.png">'+": "+image_url
+                            message = 'write the image url without using []() in the format like this <img alt="Spider-Man in Marvel style" src="https://cdn.discordapp.com/attachments/1126752714429321320/1127231336265031710/hernandeznicole_3984212544276046_spiderman_in_Marvel_style_8fef3244-c5ae-4dd7-9423-15d0a0d752ee.png">'+": "+image_url
                             response = client.send_message(model, message, with_chat_break=True)
                             print(response)
                         else:
@@ -258,7 +258,7 @@ class OpenAIClient(BaseLLMModel):
                                 token = poe_token
                                 client = poe.Client(token)
                                 poe.logger.setLevel(logging.INFO)
-                                message = 'write the image url in the format like this <img alt="Spider-Man in Marvel style" src="https://cdn.discordapp.com/attachments/1126752714429321320/1127231336265031710/hernandeznicole_3984212544276046_spiderman_in_Marvel_style_8fef3244-c5ae-4dd7-9423-15d0a0d752ee.png">'+": "+upscale_url
+                                message = 'write the image url without using []() in the format like this <img alt="Spider-Man in Marvel style" src="https://cdn.discordapp.com/attachments/1126752714429321320/1127231336265031710/hernandeznicole_3984212544276046_spiderman_in_Marvel_style_8fef3244-c5ae-4dd7-9423-15d0a0d752ee.png">'+": "+upscale_url
                                 response = client.send_message(model, message, with_chat_break=True)
                                 print(response)
                             else:
@@ -310,7 +310,7 @@ class OpenAIClient(BaseLLMModel):
                                 token = poe_token
                                 client = poe.Client(token)
                                 poe.logger.setLevel(logging.INFO)
-                                message = 'write the image url in the format like this <img alt="Spider-Man in Marvel style" src="https://cdn.discordapp.com/attachments/1126752714429321320/1127231336265031710/hernandeznicole_3984212544276046_spiderman_in_Marvel_style_8fef3244-c5ae-4dd7-9423-15d0a0d752ee.png">'+": "+variation_url
+                                message = 'write the image url without using []() in the format like this <img alt="Spider-Man in Marvel style" src="https://cdn.discordapp.com/attachments/1126752714429321320/1127231336265031710/hernandeznicole_3984212544276046_spiderman_in_Marvel_style_8fef3244-c5ae-4dd7-9423-15d0a0d752ee.png">'+": "+variation_url
                                 response = client.send_message(model, message, with_chat_break=True)
                                 print(response)
                             else:
