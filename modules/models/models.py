@@ -206,7 +206,7 @@ class OpenAIClient(BaseLLMModel):
                             token = poe_token
                             client = poe.Client(token)
                             poe.logger.setLevel(logging.INFO)
-                            message = 'write the image url without using []() in the format like this <img src="https://cdn.discordapp.com/attachments/1126752714429321320/1127236437629210714/hernandeznicole_7109805271309167_spiderman_realistic_photograph_b56bc980-e3c3-480a-943b-a4823c22bc68.png">'+": "+image_url
+                            message = 'write the image url in html format but not in code block: '+image_url
                             response = client.send_message(model, message, with_chat_break=True)
                             print(response)
                         else:
