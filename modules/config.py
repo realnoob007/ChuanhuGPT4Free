@@ -23,6 +23,8 @@ __all__ = [
     "server_name",
     "server_port",
     "share",
+    "check_update",
+    "latex_delimiters_set",
     "hide_history_when_not_logged_in",
     "default_chuanhu_assistant_model"
 ]
@@ -39,6 +41,7 @@ lang_config = config.get("language", "auto")
 language = os.environ.get("LANGUAGE", lang_config)
 
 hide_history_when_not_logged_in = config.get("hide_history_when_not_logged_in", False)
+check_update = config.get("check_update", True)
 
 if os.path.exists("api_key.txt"):
     logging.info("检测到api_key.txt文件，正在进行迁移...")
@@ -125,10 +128,10 @@ logging.basicConfig(
 )
 
 ## 处理代理：
-http_proxy = config.get("http_proxy", "")
-https_proxy = config.get("https_proxy", "")
-http_proxy = os.environ.get("HTTP_PROXY", http_proxy)
-https_proxy = os.environ.get("HTTPS_PROXY", https_proxy)
+http_proxy = os.environ.get("HTTP_PROXY", "")
+https_proxy = os.environ.get("HTTPS_PROXY", "")
+http_proxy = config.get("http_proxy", http_proxy)
+https_proxy = config.get("https_proxy", https_proxy)
 
 # 重置系统变量，在不需要设置的时候不设置环境变量，以免引起全局代理报错
 os.environ["HTTP_PROXY"] = ""
@@ -156,6 +159,42 @@ def retrieve_proxy(proxy=None):
         # return old proxy
         os.environ["HTTP_PROXY"], os.environ["HTTPS_PROXY"] = old_var
 
+## 处理latex options
+user_latex_option = config.get("latex_option", "default")
+if user_latex_option == "default":
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "$", "right": "$", "display": False},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+    ]
+elif user_latex_option == "strict":
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+    ]
+elif user_latex_option == "all":
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "$", "right": "$", "display": False},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+        {"left": "\\begin{equation}", "right": "\\end{equation}", "display": True},
+        {"left": "\\begin{align}", "right": "\\end{align}", "display": True},
+        {"left": "\\begin{alignat}", "right": "\\end{alignat}", "display": True},
+        {"left": "\\begin{gather}", "right": "\\end{gather}", "display": True},
+        {"left": "\\begin{CD}", "right": "\\end{CD}", "display": True},
+    ]
+elif user_latex_option == "disabled":
+    latex_delimiters_set = []
+else:
+    latex_delimiters_set = [
+        {"left": "$$", "right": "$$", "display": True},
+        {"left": "$", "right": "$", "display": False},
+        {"left": "\\(", "right": "\\)", "display": False},
+        {"left": "\\[", "right": "\\]", "display": True},
+    ]
 
 ## 处理advance docs
 advance_docs = defaultdict(lambda: defaultdict(dict))

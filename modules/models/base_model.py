@@ -246,7 +246,7 @@ class BaseLLMModel:
         stream_iter = self.get_answer_stream_iter()
 
         if display_append:
-            display_append = "<hr>" +display_append
+            display_append = '\n\n<hr class="append-display no-in-raw" />' + display_append
         for partial_text in stream_iter:
             chatbot[-1] = (chatbot[-1][0], partial_text + display_append)
             self.all_token_counts[-1] += 1
@@ -348,10 +348,11 @@ class BaseLLMModel:
                 reference_results.append([result['body'], result['href']])
                 display_append.append(
                     # f"{idx+1}. [{domain_name}]({result['href']})\n"
-                    f"<li><a href=\"{result['href']}\" target=\"_blank\">{result['title']}</a></li>\n"
+                    f"<a href=\"{result['href']}\" target=\"_blank\">{idx+1}.&nbsp;{result['title']}</a>"
                 )
             reference_results = add_source_numbers(reference_results)
-            display_append = "<ol>\n\n" + "".join(display_append) + "</ol>"
+            # display_append = "<ol>\n\n" + "".join(display_append) + "</ol>"
+            display_append = '<div class = "source-a">' + "".join(display_append) + '</div>'
             real_inputs = (
                 replace_today(WEBSEARCH_PTOMPT_TEMPLATE)
                 .replace("{query}", real_inputs)
@@ -664,6 +665,24 @@ class BaseLLMModel:
             # 没有对话历史或者对话历史解析失败
             logging.info(f"没有找到对话历史记录 {filename}")
             return gr.update(), self.system_prompt, gr.update()
+
+    def delete_chat_history(self, filename, user_name):
+        if filename == "CANCELED":
+            return gr.update(), gr.update(), gr.update()
+        if filename == "":
+            return i18n("你没有选择任何对话历史"), gr.update(), gr.update()
+        if not filename.endswith(".json"):
+            filename += ".json"
+        if "/" not in filename:
+            history_file_path = os.path.join(HISTORY_DIR, user_name, filename)
+        else:
+            history_file_path = filename
+        try:
+            os.remove(history_file_path)
+            return i18n("删除对话历史成功"), get_history_names(False, user_name), []
+        except:
+            logging.info(f"删除对话历史失败 {history_file_path}")
+            return i18n("对话历史")+filename+i18n("已经被删除啦"), gr.update(), gr.update()
 
     def auto_load(self):
         if self.user_identifier == "":
